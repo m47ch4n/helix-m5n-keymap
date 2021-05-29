@@ -60,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______,                   MOD_MAC, MOD_WIN, _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______,                   KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, _______, _______, \
     _______, _______, _______, _______, _______, _______,                   _______, RGB_TOG, RGB_MDI, RGB_HUI, RGB_SAI, RGB_VAI, \
-    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_RDD, RGB_HUD, RGB_SAD, RGB_VAD )
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_MDD, RGB_HUD, RGB_SAD, RGB_VAD )
 };
 
 void encoder_update_user(uint8_t index, bool clockwise) {
