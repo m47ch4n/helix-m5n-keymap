@@ -16,10 +16,10 @@ jobs:
         repository: 'qmk/qmk_firmware'
         submodules: true
     
-    - name: Clone $GITHUB_REPOSITORY
+    - name: Clone this repo
       uses: actions/checkout@v2
       with:
-        path: ./keyboards/$KEYBOARD/keymaps/$KEYMAP
+        path: './keyboards/$KEYBOARD/keymaps/$KEYMAP'
 
     - name: Install dependencies
       run: ./util/qmk_install.sh
