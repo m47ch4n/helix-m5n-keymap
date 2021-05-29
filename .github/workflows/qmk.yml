@@ -2,10 +2,6 @@ name: QMK
 
 on: [push]
 
-env:
-  KEYBOARD: 'helix/rev3_4rows'
-  KEYMAP: 'm5n-keymap'
-
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -16,18 +12,18 @@ jobs:
         repository: 'qmk/qmk_firmware'
         submodules: true
     
-    - name: Clone this repo
+    - name: Clone m47ch4n/helix-m5n-keymap
       uses: actions/checkout@v2
       with:
-        path: './keyboards/$KEYBOARD/keymaps/$KEYMAP'
+        path: './keyboards/helix/rev3_4rows/keymaps/m5n-keymap'
 
     - name: Install dependencies
       run: ./util/qmk_install.sh
 
     - name: Compile
-      run: ./bin/qmk compile -kb $KEYBOARD -km $KEYMAP
+      run: ./bin/qmk compile -kb helix/rev3_4rows -km m5n-keymap
 
     - uses: actions/upload-artifact@v2
       with:
-        name: artifacts
-        path: ./.build/*.hex
+        name: helix_rev3_4rows_m5n-keymap.hex
+        path: ./.build/helix_rev3_4rows_m5n-keymap.hex
