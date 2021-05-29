@@ -1,13 +1,10 @@
 name: QMK
 
-on:
-  - push
+on: [push]
 
-defaults:
-  run:
-    environment:
-      KEYBOARD: 'helix/rev3_4rows'
-      KEYMAP: 'm5n-keymap'
+env:
+  KEYBOARD: 'helix/rev3_4rows'
+  KEYMAP: 'm5n-keymap'
 
 jobs:
   build:
