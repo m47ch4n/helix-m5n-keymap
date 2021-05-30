@@ -14,28 +14,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-
-
-// Defines names for use in layer keycodes and the keymap
-enum layer_names {
-  _QWERTY = 0,
-  _LOWER,
-  _RAISE,
-  _ADJUST
-};
+#include "keymap_jp.h"
+#include "jtu_custom_keycodes.h"
+#include "common.h"
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
-  ADJUST = SAFE_RANGE,
-  RGBRST
+  ADJUST = JTU_SAFE_RANGE,
+  MOD_US,
+  MOD_JP
 };
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 #define RGB_MDI RGB_MOD
 #define RGB_MDD RGB_RMOD
-#define MOD_WIN LAG_NRM
-#define MOD_MAC LAG_SWP
+#define MOD_MAC LAG_NRM
+#define MOD_WIN LAG_SWP
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT( \
@@ -44,20 +39,38 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                   KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RALT, \
     ADJUST , KC_CAPS, KC_APP , KC_LGUI, KC_LALT, LOWER  , KC_SPC , KC_ENT , RAISE  , KC_RSFT, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT),
 
+  [_QWERTY_JP] = LAYOUT( \
+    _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, JU_BSLS, \
+    _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, JU_SCLN, JU_QUOT, \
+    _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, \
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ ),
+
   [_LOWER] = LAYOUT( \
     KC_TILD, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
     _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_GRV , \
     _______, _______, _______, _______, KC_MINS, KC_LBRC,                   KC_RBRC, KC_EQL , _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______, KC_ESC , KC_BSPC, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END ),
 
+  [_LOWER_JP] = LAYOUT( \
+    _______, _______, JU_AT  , _______, _______, _______,                   JU_CIRC, JU_AMPR, JU_ASTR, JU_LPRN, JU_RPRN, JU_PIPE, \
+    _______, _______, JU_2   , _______, _______, _______,                   JU_6   , JU_7   , JU_8   , JU_9   , JU_0   , JU_GRV , \
+    _______, _______, _______, _______, JU_MINS, JU_LBRC,                   JU_RBRC, JU_EQL , _______, _______, _______, _______, \
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ ),
+
   [_RAISE] = LAYOUT( \
     KC_F11 , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                   KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F12 , \
     _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, \
-    _______, _______, _______, _______, KC_UNDS, KC_LCBR,                   KC_RCBR, KC_PLUS, _______, _______, _______, _______, \
+    _______, _______, _______, _______, KC_UNDS, KC_LBRC,                   KC_RBRC, KC_EQL , _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______, KC_ESC , KC_DEL , _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END ),
 
+  [_RAISE_JP] = LAYOUT( \
+    _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, \
+    _______, _______, JU_2   , _______, _______, _______,                   JU_6   , JU_7   , JU_8   , JU_9   , JU_0   , JU_GRV , \
+    _______, _______, _______, _______, JU_MINS, JU_LBRC,                   JU_RBRC, JU_EQL , _______, _______, _______, _______, \
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ ),
+
   [_ADJUST] = LAYOUT( \
-    _______, _______, _______, _______, _______, _______,                   MOD_MAC, MOD_WIN, _______, _______, _______, _______, \
+    _______, _______, _______, _______, MOD_US , MOD_JP ,                   MOD_MAC, MOD_WIN, _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______,                   KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, _______, _______, \
     _______, _______, _______, _______, _______, _______,                   _______, RGB_TOG, RGB_MDI, RGB_HUI, RGB_SAI, RGB_VAI, \
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_MDD, RGB_HUD, RGB_SAD, RGB_VAD )
@@ -80,11 +93,31 @@ void encoder_update_user(uint8_t index, bool clockwise) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  state = update_tri_layer_state(state, _LOWER, _QWERTY_JP, _LOWER_JP);
+  state = update_tri_layer_state(state, _RAISE, _QWERTY_JP, _RAISE_JP);
+  return state;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  is_jp_mode();
+  if (!process_record_user_jtu(keycode, record)) {
+    return false;
+  }
+
   switch (keycode) {
+    case MOD_US:
+      if (record->event.pressed) {
+        set_single_persistent_default_layer(_QWERTY);
+        layer_off(_QWERTY_JP);
+      }
+      return false;
+    case MOD_JP:
+      if (record->event.pressed) {
+        set_single_persistent_default_layer(_QWERTY_JP);
+        layer_on(_QWERTY_JP);
+      }
+      return false;
     case ADJUST:
       if (record->event.pressed) {
         layer_on(_LOWER);
@@ -93,10 +126,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_LOWER);
         layer_off(_RAISE);
       }
-      break;
+      return false;
   }
   return true;
 }
+
+void keyboard_post_init_user(void) {
+  if (is_jp_mode()) {
+    layer_on(_QWERTY_JP);
+  }
+}
+
 
 /*
 void matrix_init_user(void) {

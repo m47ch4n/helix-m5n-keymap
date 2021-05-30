@@ -5,6 +5,7 @@ on: [push]
 env:
   KEYBOARD: helix/rev3_4rows
   KEYMAP: m5n-keymap
+  ARTIFACT: helix_rev3_4rows_m5n-keymap.hex
 
 jobs:
   build:
@@ -16,10 +17,10 @@ jobs:
         repository: 'qmk/qmk_firmware'
         submodules: true
     
-    - name: Clone m47ch4n/helix-m5n-keymap
+    - name: Clone this repo
       uses: actions/checkout@v2
       with:
-        path: './keyboards/${{ env.KEYBOARD }}/keymaps/${{ env.KEYMAP }}'
+        path: ./keyboards/${{ env.KEYBOARD }}/keymaps/${{ env.KEYMAP }}
 
     - name: Install dependencies
       run: ./util/qmk_install.sh
@@ -29,5 +30,5 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: helix_rev3_4rows_m5n-keymap.hex
-        path: ./.build/helix_rev3_4rows_m5n-keymap.hex
+        name: ${{ env.ARTIFACT }}
+        path: ./.build/${{ env.ARTIFACT }}
