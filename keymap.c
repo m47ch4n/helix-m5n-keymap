@@ -100,7 +100,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  is_jp_mode();
   if (!process_record_user_jtu(keycode, record)) {
     return false;
   }
