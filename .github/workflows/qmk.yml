@@ -5,7 +5,6 @@ on: [push]
 env:
   KEYBOARD: helix/rev3_4rows
   KEYMAP: m5n-keymap
-  FIRMWARE: helix_rev3_4rows_m5n-keymap.hex
 
 jobs:
   build:
@@ -29,12 +28,16 @@ jobs:
       - name: Compile
         run: ./bin/qmk compile -kb ${{ env.KEYBOARD }} -km ${{ env.KEYMAP }}
 
-      - name: Upload artifact
+      - name: Collect artifacts
+        run:  |
+          mkdir artifacts/
+          cp ./.build/*.hex artifacts/
+          cp ./keyboards/${{ env.KEYBOARD }}/keymaps/${{ env.KEYMAP }}/{README.md,LICENSE} artifacts/
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: |
-            ./.build/${{ env.FIRMWARE }}
-            ./keyboards/${{ env.KEYBOARD }}/keymaps/${{ env.KEYMAP }}/{LICENSE,README.md}
+          path: ./artifacts/*
 
   release:
     runs-on: ubuntu-20.04
@@ -43,13 +46,12 @@ jobs:
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v2
+        with:
+          path: ./artifacts
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            ${{ env.FIRMWARE }}
-            LICENSE
-            README.md
+          files: ./artifacts/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
