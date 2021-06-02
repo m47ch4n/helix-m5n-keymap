@@ -26,7 +26,7 @@
  */
 
 #include QMK_KEYBOARD_H
-#include "common.h"
+#include "lib/common.h"
 
 #ifdef OLED_DRIVER_ENABLE
 
@@ -51,15 +51,12 @@ void render_status(void) {
 
   switch (get_highest_layer(layer_state)) {
       case _QWERTY:
-      case _QWERTY_JP:
           oled_write_P(PSTR("Default\n"), false);
           break;
       case _LOWER:
-      case _LOWER_JP:
           oled_write_P(PSTR("Lower\n"), false);
           break;
       case _RAISE:
-      case _RAISE_JP:
           oled_write_P(PSTR("Raise\n"), false);
           break;
       case _ADJUST:
