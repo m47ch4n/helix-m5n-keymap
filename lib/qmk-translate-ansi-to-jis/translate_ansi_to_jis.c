@@ -11,10 +11,10 @@ typedef enum {
 void mod_shift(uint8_t mod_shift) {
   switch (mod_shift) {
     case SHFT:
-      set_mods(MOD_MASK_SHIFT);
+      set_mods(MOD_BIT(KC_LSFT));
       break;
     case USFT:
-      del_mods(MOD_MASK_SHIFT);
+      del_mods(MOD_BIT(KC_LSFT));
       break;
     default:
       // invalid mod shift type
@@ -26,20 +26,18 @@ void translate_shifted(
   keyrecord_t *record,
   uint16_t position_key,
   mod_shift_t position_mod,
-  bool *key_registered
-) {
+  bool *key_registered) {
   if (record->event.pressed) {
     mod_shift(position_mod);
     register_code(position_key);
+    set_mods(mod_state);
     *key_registered = true;
   } else {
     if (*key_registered) {
-      mod_shift(position_mod);
       unregister_code(position_key);
       *key_registered = false;
     }
   }
-  set_mods(mod_state);
 }
 
 #define TRANSLATE_SHIFTED(POS, POS_MOD) \
@@ -56,8 +54,7 @@ void translate(
   bool *key_with_shift_registered,
   uint16_t up_position_key,
   mod_shift_t up_position_mod,
-  bool *key_without_shift_registered
-) {
+  bool *key_without_shift_registered) {
   if (record->event.pressed) {
     if (mod_state & MOD_MASK_SHIFT) {
       mod_shift(down_position_mod);
@@ -68,18 +65,16 @@ void translate(
       register_code(up_position_key);
       *key_without_shift_registered = true;
     }
+    set_mods(mod_state);
   } else {
     if (*key_with_shift_registered) {
-      mod_shift(down_position_mod);
       unregister_code(down_position_key);
       *key_with_shift_registered = false;
     } else if (*key_without_shift_registered) {
-      mod_shift(up_position_mod);
       unregister_code(up_position_key);
       *key_without_shift_registered = false;
     }
   }
-  set_mods(mod_state);
 }
 
 #define TRANSLATE(DN_POS_KEY, DN_POS_MOD, UP_POS_KEY, UP_POS_MOD) \
