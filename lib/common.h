@@ -11,10 +11,10 @@ enum layer_names {
 typedef union {
   uint32_t raw;
   struct {
-    bool is_jp_mode : 1;
+    bool is_jis_mode: 1;
   };
 } user_config_t;
 
 void init_user_config(void);
-bool is_jp_mode(void);
-void set_jp_mode(bool is_jp_mode);
+bool is_jis_mode(void);
+void set_jis_mode(bool is_jis_mode);

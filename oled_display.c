@@ -67,7 +67,7 @@ void render_status(void) {
           oled_write_ln_P(PSTR("Undefined"), false);
   }
 
-  if (is_jp_mode()) {
+  if (is_jis_mode()) {
     oled_write_P(PSTR("   Output: JIS(JP)\n"), false);
   } else {
     oled_write_P(PSTR("   Output: ANSI(US)\n"), false);

@@ -20,8 +20,8 @@
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
   ADJUST = SAFE_RANGE,
-  MOD_US,
-  MOD_JP
+  MOD_ANS,
+  MOD_JIS
 };
 
 #define LOWER MO(_LOWER)
@@ -51,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______, KC_ESC , KC_DEL , _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END ),
 
   [_ADJUST] = LAYOUT( \
-    _______, _______, _______, _______, MOD_US , MOD_JP ,                   MOD_MAC, MOD_WIN, _______, _______, EEP_RST, RESET  , \
+    _______, _______, _______, _______, MOD_ANS, MOD_JIS,                   MOD_MAC, MOD_WIN, _______, _______, EEP_RST, RESET  , \
     _______, _______, _______, _______, _______, _______,                   KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, _______, _______, \
     _______, _______, _______, _______, _______, _______,                   _______, _______, RGB_MDI, RGB_HUI, RGB_SAI, RGB_VAI, \
     _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_TOG, RGB_MDD, RGB_HUD, RGB_SAD, RGB_VAD)
@@ -74,24 +74,23 @@ void encoder_update_user(uint8_t index, bool clockwise) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
-  return state;
+  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (is_jp_mode() && !process_record_user_taj(keycode, record)) {
+  if (is_jis_mode() && !process_record_user_taj(keycode, record)) {
     return false;
   }
 
   switch (keycode) {
-    case MOD_US:
+    case MOD_ANS:
       if (record->event.pressed) {
-        set_jp_mode(false);
+        set_jis_mode(false);
       }
       return false;
-    case MOD_JP:
+    case MOD_JIS:
       if (record->event.pressed) {
-        set_jp_mode(true);
+        set_jis_mode(true);
       }
       return false;
     case ADJUST:
