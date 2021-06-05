@@ -42,19 +42,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TILD, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
     _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_GRV , \
     _______, _______, _______, _______, KC_MINS, KC_LBRC,                   KC_RBRC, KC_EQL , _______, _______, _______, _______, \
-    _______, _______, _______, _______, _______, _______, KC_ESC , KC_BSPC, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END ),
+    _______, KC_NLCK, KC_PAUS, _______, _______, _______, KC_ESC , KC_BSPC, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END ),
 
   [_RAISE] = LAYOUT( \
     KC_F11 , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                   KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F12 , \
     _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______, \
     _______, _______, _______, _______, KC_UNDS, KC_LCBR,                   KC_RCBR, KC_PLUS, _______, _______, _______, _______, \
-    _______, _______, _______, _______, _______, _______, KC_ESC , KC_DEL , _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END ),
+    _______, KC_SLCK, KC_INS , _______, _______, _______, KC_ESC , KC_DEL , _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END ),
 
   [_ADJUST] = LAYOUT( \
-    _______, _______, _______, _______, MOD_ANS, MOD_JIS,                   MOD_MAC, MOD_WIN, _______, _______, EEP_RST, RESET  , \
+    _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______,                   KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, _______, _______, \
-    _______, _______, _______, _______, _______, _______,                   _______, _______, RGB_MDI, RGB_HUI, RGB_SAI, RGB_VAI, \
-    _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_TOG, RGB_MDD, RGB_HUD, RGB_SAD, RGB_VAD)
+    _______, MOD_ANS, MOD_JIS, _______, _______, _______,                   _______, _______, RGB_MDI, RGB_HUI, RGB_SAI, RGB_VAI, \
+    _______, XXXXXXX, KC_PSCR, _______, _______, _______, EEP_RST, RESET  , _______, RGB_TOG, RGB_MDD, RGB_HUD, RGB_SAD, RGB_VAD)
 };
 
 void encoder_update_user(uint8_t index, bool clockwise) {

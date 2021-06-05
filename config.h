@@ -17,3 +17,8 @@
 #pragma once
 
 // place overrides here
+
+#ifdef OLED_FONT_H
+  #undef OLED_FONT_H
+#endif
+#define OLED_FONT_H "helixfont.h"

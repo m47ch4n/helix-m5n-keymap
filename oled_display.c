@@ -33,21 +33,21 @@
 void render_status(void) {
 
   // Render to mode icon
-  static const char os_logo[][2][3] PROGMEM  ={{{0x95,0x96,0},{0xb5,0xb6,0}},{{0x97,0x98,0},{0xb7,0xb8,0}}};
-  if (is_mac_mode()) {
-    oled_write_P(os_logo[0][0], false);
+  static const char lang_logo[][2][4] PROGMEM  ={ { {0x95,0x96,0x97,0x00}, {0xb5,0xb6,0xb7,0x00} }, { {0x98,0x99,0x9a,0x00}, {0xb8,0xb9,0xba,0x00} } };
+  if (!is_jis_mode()) {
+    oled_write_P(lang_logo[0][0], false);
     oled_write_P(PSTR("\n"), false);
-    oled_write_P(os_logo[0][1], false);
+    oled_write_P(lang_logo[0][1], false);
   }else{
-    oled_write_P(os_logo[1][0], false);
+    oled_write_P(lang_logo[1][0], false);
     oled_write_P(PSTR("\n"), false);
-    oled_write_P(os_logo[1][1], false);
+    oled_write_P(lang_logo[1][1], false);
   }
 
-  oled_write_P(PSTR(" "), false);
+  oled_write_P(PSTR("  "), false);
 
   // Host Keyboard Layer Status
-  oled_write_P(PSTR("Layer : "), false);
+  oled_write_P(PSTR("Layer: "), false);
 
   switch (get_highest_layer(layer_state)) {
       case _QWERTY:
@@ -67,17 +67,13 @@ void render_status(void) {
           oled_write_ln_P(PSTR("Undefined"), false);
   }
 
-  if (is_jis_mode()) {
-    oled_write_P(PSTR("   Output: JIS(JP)\n"), false);
-  } else {
-    oled_write_P(PSTR("   Output: ANSI(US)\n"), false);
-  }
+  oled_write_P(PSTR("     "), false);
 
   // Host Keyboard LED Status
   led_t led_state = host_keyboard_led_state();
-  oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
-  oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
-  oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+  oled_write_P(led_state.caps_lock ? PSTR("CAP  ") : PSTR("     "), false);
+  oled_write_P(led_state.num_lock ? PSTR("NUM  ") : PSTR("     "), false);
+  oled_write_P(led_state.scroll_lock ? PSTR("SCR  ") : PSTR("     "), false);
 }
 
 
