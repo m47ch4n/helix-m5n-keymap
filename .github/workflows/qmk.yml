@@ -21,6 +21,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: ./keyboards/${{ env.KEYBOARD }}/keymaps/${{ env.KEYMAP }}
+          submodules: true
 
       - name: Install dependencies
         run: ./util/qmk_install.sh
