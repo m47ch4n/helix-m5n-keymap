@@ -15,7 +15,7 @@
  */
 #include QMK_KEYBOARD_H
 #include "lib/common.h"
-#include "lib/qmk-translate-ansi-to-jis/translate_ansi_to_jis.h"
+#include "lib/a2j/translate_ansi_to_jis.h"
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
@@ -78,7 +78,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (is_jis_mode() && !process_record_user_taj(keycode, record)) {
+  if (is_jis_mode() && !process_record_user_a2j(keycode, record)) {
     return false;
   }
 

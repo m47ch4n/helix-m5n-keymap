@@ -1,3 +1,3 @@
-[submodule "lib/qmk-translate-ansi-to-jis"]
-	path = lib/qmk-translate-ansi-to-jis
+[submodule "lib/a2j"]
+	path = lib/a2j
 	url = https://github.com/m47ch4n/qmk-translate-ansi-to-jis.git
