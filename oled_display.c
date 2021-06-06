@@ -33,7 +33,17 @@
 void render_status(void) {
 
   // Render to mode icon
-  static const char lang_logo[][2][4] PROGMEM  ={ { {0x95,0x96,0x97,0x00}, {0xb5,0xb6,0xb7,0x00} }, { {0x98,0x99,0x9a,0x00}, {0xb8,0xb9,0xba,0x00} } };
+  static const char lang_logo[][2][4] PROGMEM  ={
+    {
+      {0x95, 0x96, 0x97, 0x00},
+      {0xb5, 0xb6, 0xb7, 0x00}
+    },
+    {
+      {0x98, 0x99, 0x9a, 0x00},
+      {0xb8, 0xb9, 0xba, 0x00}
+    }
+  };
+
   if (!is_jis_mode()) {
     oled_write_P(lang_logo[0][0], false);
     oled_write_P(PSTR("\n"), false);
@@ -87,30 +97,26 @@ static void render_logo(void) {
     oled_write_P(qmk_logo, false);
 }
 
-static void render_rgbled_status(bool full) {
+static void render_rgbled_status(void) {
 #ifdef RGBLIGHT_ENABLE
   char buf[30];
   if (RGBLIGHT_MODES > 1 && rgblight_is_enabled()) {
-      if (full) {
-          snprintf(buf, sizeof(buf), " LED %2d: %d,%d,%d ",
-                   rgblight_get_mode(),
-                   rgblight_get_hue()/RGBLIGHT_HUE_STEP,
-                   rgblight_get_sat()/RGBLIGHT_SAT_STEP,
-                   rgblight_get_val()/RGBLIGHT_VAL_STEP);
-      } else {
-          snprintf(buf, sizeof(buf), "[%2d] ", rgblight_get_mode());
-      }
-      oled_write(buf, false);
+    snprintf(buf, sizeof(buf), "LED %02d: HSV(%02d,%02d,%02d)",
+      rgblight_get_mode(),
+      rgblight_get_hue() / RGBLIGHT_HUE_STEP,
+      rgblight_get_sat() / RGBLIGHT_SAT_STEP,
+      rgblight_get_val() / RGBLIGHT_VAL_STEP);
+    oled_write(buf, false);
   }
 #endif
 }
 
 void oled_task_user(void) {
-  if(is_keyboard_master()){
+  if(is_keyboard_master()) {
     render_status();
-  }else{
+  } else {
     render_logo();
-    render_rgbled_status(true);
+    render_rgbled_status();
   }
 }
 
