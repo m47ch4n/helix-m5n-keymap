@@ -28,8 +28,6 @@ enum custom_keycodes {
 #define RAISE MO(_RAISE)
 #define RGB_MDI RGB_MOD
 #define RGB_MDD RGB_RMOD
-#define MOD_MAC LAG_NRM
-#define MOD_WIN LAG_SWP
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT( \
@@ -56,22 +54,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, MOD_ANS, MOD_JIS, _______, _______, _______,                   _______, _______, RGB_MDI, RGB_HUI, RGB_SAI, RGB_VAI, \
     _______, XXXXXXX, KC_PSCR, _______, _______, _______, EEP_RST, RESET  , _______, RGB_TOG, RGB_MDD, RGB_HUD, RGB_SAD, RGB_VAD)
 };
-
-void encoder_update_user(uint8_t index, bool clockwise) {
-  if (index == 0) { /* Left side encoder */
-    if (clockwise) {
-      tap_code(KC_PGDN);
-    } else {
-      tap_code(KC_PGUP);
-    }
-  } else if (index == 1) { /* Right side encoder */
-    if (clockwise) {
-      tap_code(KC_DOWN);
-    } else {
-      tap_code(KC_UP);
-    }
-  }
-}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
@@ -109,18 +91,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void keyboard_post_init_user(void) {
   init_user_config();
 }
-
-
-/*
-void matrix_init_user(void) {
-
-}
-
-void matrix_scan_user(void) {
-
-}
-
-bool led_update_user(led_t led_state) {
-    return true;
-}
-*/
