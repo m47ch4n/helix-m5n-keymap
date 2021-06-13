@@ -55,9 +55,10 @@ void render_status(void) {
 
   oled_write_P(PSTR("\n"), false);
   oled_write_P(!is_jis_mode() ? lang_logo[0][1] : lang_logo[1][1], false);
+  oled_write_P(PSTR(" "), false);
 
   // Host Keyboard Layer Status
-  oled_write_P(PSTR(" Layer  : "), false);
+  oled_write_P(PSTR("Layer: "), false);
 
   switch (get_highest_layer(layer_state)) {
       case _QWERTY:
@@ -83,15 +84,28 @@ void render_status(void) {
           oled_write_ln_P(PSTR("Undefined"), false);
   }
 
-  oled_write_P(PSTR("    Command: "), false);
-  oled_write_P(is_command_mode() ? PSTR("CMD\n") : PSTR("Ctrl\n"), false);
+  static const char cmd_logo[][2][3] PROGMEM = {
+    {
+      {0x9b, 0x9c, 0x00},
+      {0xbb, 0xbc, 0x00}
+    },
+    {
+      {0x9d, 0x9e, 0x00},
+      {0xbd, 0xbe, 0x00}
+    }
+  };
+
+  oled_write_P(is_command_mode() ? cmd_logo[0][0] : cmd_logo[1][0], false);
+  oled_write_P(PSTR("  "), false);
 
   // Host Keyboard LED Status
   led_t led_state = host_keyboard_led_state();
-  oled_write_P(PSTR("    "), false);
   oled_write_P(led_state.caps_lock ? PSTR("CAP  ") : PSTR("     "), false);
   oled_write_P(led_state.num_lock ? PSTR("NUM  ") : PSTR("     "), false);
-  oled_write_P(led_state.scroll_lock ? PSTR("SCR  ") : PSTR("     "), false);
+  oled_write_P(led_state.scroll_lock ? PSTR("SCR") : PSTR("   "), false);
+
+  oled_write_P(PSTR("\n"), false);
+  oled_write_P(is_command_mode() ? cmd_logo[0][1] : cmd_logo[1][1], false);
 }
 
 
