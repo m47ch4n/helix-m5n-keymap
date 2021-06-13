@@ -22,3 +22,5 @@
   #undef OLED_FONT_H
 #endif
 #define OLED_FONT_H "helixfont.h"
+
+#define MIDI_ADVANCED

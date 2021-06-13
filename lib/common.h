@@ -5,16 +5,22 @@ enum layer_names {
   _QWERTY = 0,
   _LOWER,
   _RAISE,
-  _ADJUST
+  _ADJUST,
+  _CONFIG,
+  _MIDI
 };
 
 typedef union {
   uint32_t raw;
   struct {
     bool is_jis_mode: 1;
+    bool is_command_mode: 1;
   };
 } user_config_t;
 
 void init_user_config(void);
 bool is_jis_mode(void);
 void set_jis_mode(bool is_jis_mode);
+
+bool is_command_mode(void);
+void set_command_mode(bool is_command_mode);

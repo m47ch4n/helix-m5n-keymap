@@ -32,8 +32,7 @@
 
 void render_status(void) {
 
-  // Render to mode icon
-  static const char lang_logo[][2][4] PROGMEM  ={
+  static const char lang_logo[][2][4] PROGMEM = {
     {
       {0x95, 0x96, 0x97, 0x00},
       {0xb5, 0xb6, 0xb7, 0x00}
@@ -44,20 +43,21 @@ void render_status(void) {
     }
   };
 
-  if (!is_jis_mode()) {
-    oled_write_P(lang_logo[0][0], false);
-    oled_write_P(PSTR("\n"), false);
-    oled_write_P(lang_logo[0][1], false);
-  }else{
-    oled_write_P(lang_logo[1][0], false);
-    oled_write_P(PSTR("\n"), false);
-    oled_write_P(lang_logo[1][1], false);
-  }
+  oled_write_P(!is_jis_mode() ? lang_logo[0][0] : lang_logo[1][0], false);
+  oled_write_P(PSTR(" "), false);
 
-  oled_write_P(PSTR("  "), false);
+  // Host Keyboard LED Status
+  uint8_t mod_state = get_mods();
+  oled_write_P(mod_state & MOD_MASK_SHIFT ? PSTR("SFT ") : PSTR("    "), false);
+  oled_write_P(mod_state & MOD_MASK_CTRL ? PSTR("CTL ") : PSTR("    "), false);
+  oled_write_P(mod_state & MOD_MASK_ALT ? PSTR("ALT ") : PSTR("   "), false);
+  oled_write_P(mod_state & MOD_MASK_GUI ? PSTR("GUI ") : PSTR("   "), false);
+
+  oled_write_P(PSTR("\n"), false);
+  oled_write_P(!is_jis_mode() ? lang_logo[0][1] : lang_logo[1][1], false);
 
   // Host Keyboard Layer Status
-  oled_write_P(PSTR("Layer: "), false);
+  oled_write_P(PSTR(" Layer  : "), false);
 
   switch (get_highest_layer(layer_state)) {
       case _QWERTY:
@@ -72,15 +72,23 @@ void render_status(void) {
       case _ADJUST:
           oled_write_P(PSTR("Adjust\n"), false);
           break;
+      case _CONFIG:
+          oled_write_P(PSTR("Config\n"), false);
+          break;
+      case _MIDI:
+          oled_write_P(PSTR("MIDI\n"), false);
+          break;
       default:
           // Or use the write_ln shortcut over adding '\n' to the end of your string
           oled_write_ln_P(PSTR("Undefined"), false);
   }
 
-  oled_write_P(PSTR("     "), false);
+  oled_write_P(PSTR("    Command: "), false);
+  oled_write_P(is_command_mode() ? PSTR("CMD\n") : PSTR("Ctrl\n"), false);
 
   // Host Keyboard LED Status
   led_t led_state = host_keyboard_led_state();
+  oled_write_P(PSTR("    "), false);
   oled_write_P(led_state.caps_lock ? PSTR("CAP  ") : PSTR("     "), false);
   oled_write_P(led_state.num_lock ? PSTR("NUM  ") : PSTR("     "), false);
   oled_write_P(led_state.scroll_lock ? PSTR("SCR  ") : PSTR("     "), false);
