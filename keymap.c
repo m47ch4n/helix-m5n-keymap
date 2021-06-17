@@ -20,8 +20,11 @@
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
   OUT_TOG = SAFE_RANGE,
-  CMD_TOG,
-  COMMAND,
+  CSTMTOG,
+  CSTMMOD,
+  OS_TOG,
+  WS_BACK,
+  WS_FWRD
 };
 
 #define LOWER MO(_LOWER)
@@ -30,23 +33,36 @@ enum custom_keycodes {
 #define RGB_MDI RGB_MOD
 #define RGB_MDD RGB_RMOD
 
+static const uint16_t custom_mod_key_kc[] = {
+  [_GUI] = KC_LGUI,
+  [_CTRL] = KC_LCTL,
+  [_ALT] = KC_LALT,
+  [_SHIFT] = KC_LSFT
+};
+
+static const uint16_t workspace_move_kc[][2] = {
+  [_MAC] = {LCTL(KC_LEFT), LCTL(KC_RGHT)},
+  [_WINDOWS] = {LCTL(LGUI(KC_LEFT)), LCTL(LGUI(KC_RGHT))},
+  [_GNOME] = {LGUI(KC_PGUP), LGUI(KC_PGDN)}
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT( \
     KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS, \
     KC_LCTL, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                   KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT, \
     KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                   KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RALT, \
-    COMMAND, CONFIG , KC_ESC , KC_LGUI, KC_LALT, LOWER  , KC_SPC , KC_ENT , RAISE  , KC_RSFT, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT),
+    CSTMMOD, CONFIG , KC_ESC , KC_LGUI, KC_LALT, LOWER  , KC_SPC , KC_ENT , RAISE  , KC_RSFT, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT),
 
   [_LOWER] = LAYOUT( \
     KC_TILD, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
     _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_GRV , \
-    _______, _______, _______, _______, KC_MINS, KC_LBRC,                   KC_RBRC, KC_EQL , _______, _______, _______, _______, \
+    _______, _______, _______, _______, KC_MINS, KC_LBRC,                   KC_RBRC, KC_EQL , KC_LT  , KC_GT  , KC_QUES, _______, \
     _______, _______, _______, _______, _______, _______, KC_ESC , KC_BSPC, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END ),
 
   [_RAISE] = LAYOUT( \
     KC_TILD, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
     _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_GRV , \
-    _______, _______, _______, _______, KC_MINS, KC_LBRC,                   KC_RBRC, KC_EQL , _______, _______, _______, _______, \
+    _______, WS_BACK, WS_FWRD, _______, KC_MINS, KC_LBRC,                   KC_RBRC, KC_EQL , _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______, KC_ESC , KC_DEL , _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END ),
 
   [_ADJUST] = LAYOUT( \
@@ -58,8 +74,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_CONFIG] = LAYOUT( \
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_CAPS, KC_PSCR, KC_PAUS, XXXXXXX, XXXXXXX, EEP_RST, \
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_NLCK, KC_INS , KC_DEL , XXXXXXX, XXXXXXX, RESET  , \
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_SLCK, KC_APP , RGB_MDI, RGB_HUI, RGB_SAI, RGB_VAI, \
-    CMD_TOG, CONFIG , OUT_TOG, XXXXXXX, XXXXXXX, XXXXXXX, MI_TOG , XXXXXXX, XXXXXXX, RGB_TOG, RGB_MDD, RGB_HUD, RGB_SAD, RGB_VAD),
+    XXXXXXX, OS_TOG , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_SLCK, KC_APP , RGB_MDI, RGB_HUI, RGB_SAI, RGB_VAI, \
+    CSTMTOG, CONFIG , OUT_TOG, XXXXXXX, XXXXXXX, XXXXXXX, MI_TOG , XXXXXXX, XXXXXXX, RGB_TOG, RGB_MDD, RGB_HUD, RGB_SAD, RGB_VAD),
 
   [_MIDI] = LAYOUT( \
     MI_C   , MI_F   , MI_As  , MI_Ds_1, MI_Gs_1, MI_Cs_2,                   MI_Gs_2, MI_Ds_2, MI_As_1, MI_F_1 , MI_C_1 , MI_G   , \
@@ -84,16 +100,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_invert(_MIDI);
       }
       return true;
-    case CMD_TOG:
+    case CSTMTOG:
       if (!record->event.pressed) {
-        set_command_mode(!is_command_mode());
+        set_custom_mod_key((get_custom_mod_key() + 1) % 4);
       }
       return false;
-    case COMMAND:
+    case OS_TOG:
+      if (!record->event.pressed) {
+        set_os_mode((get_os_mode() + 1) % 3);
+      }
+      return false;
+    case CSTMMOD:
       if (record->event.pressed) {
-        register_code(is_command_mode() ? KC_LGUI : KC_LCTL);
+        register_code(custom_mod_key_kc[get_custom_mod_key()]);
       } else {
-        unregister_code(is_command_mode() ? KC_LGUI : KC_LCTL);
+        unregister_code(custom_mod_key_kc[get_custom_mod_key()]);
+      }
+      return false;
+    case WS_BACK:
+      if (record->event.pressed) {
+        register_code16(workspace_move_kc[get_os_mode()][0]);
+      } else {
+        unregister_code16(workspace_move_kc[get_os_mode()][0]);
+      }
+      return false;
+    case WS_FWRD:
+      if (record->event.pressed) {
+        register_code16(workspace_move_kc[get_os_mode()][1]);
+      } else {
+        unregister_code16(workspace_move_kc[get_os_mode()][1]);
       }
       return false;
   }
