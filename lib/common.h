@@ -18,7 +18,7 @@ typedef enum {
 } custom_mod_key_t;
 
 typedef enum {
-  _MAC,
+  _MAC = 0,
   _WINDOWS,
   _GNOME
 } os_mode_t;

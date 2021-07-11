@@ -44,22 +44,22 @@ void render_status(void) {
   };
 
   static const char mod_logo[][3] PROGMEM = {
-    {0xd7, 0xd8, 0x00},
-    {0xd9, 0xda, 0x00},
-    {0xdb, 0xdc, 0x00},
-    {0xdd, 0xde, 0x00},
+    [_GUI] = {0xd7, 0xd8, 0x00},
+    [_CTRL] = {0xd9, 0xda, 0x00},
+    [_ALT] = {0xdb, 0xdc, 0x00},
+    [_SHIFT] = {0xdd, 0xde, 0x00},
   };
 
   static const char os_logo[][2][3] PROGMEM = {
-    {
+    [_MAC] = {
       {0x9b, 0x9c, 0x00},
       {0xbb, 0xbc, 0x00}
     },
-    {
+    [_WINDOWS] = {
       {0x9d, 0x9e, 0x00},
       {0xbd, 0xbe, 0x00}
     },
-    {
+    [_GNOME] = {
       {0x9f, 0xd5, 0x00},
       {0xbf, 0xd6, 0x00}
     },
@@ -68,14 +68,12 @@ void render_status(void) {
   oled_write_P(!is_jis_mode() ? lang_logo[0][0] : lang_logo[1][0], false);
   oled_write_P(PSTR(" "), false);
 
-  oled_write_P(mod_logo[get_custom_mod_key()], false);
-
   // Host Keyboard LED Status
   uint8_t mod_state = get_mods();
-  oled_write_P(mod_state & MOD_MASK_GUI ? PSTR("GUI ") : PSTR("   "), false);
-  oled_write_P(mod_state & MOD_MASK_CTRL ? PSTR("CTL ") : PSTR("    "), false);
-  oled_write_P(mod_state & MOD_MASK_ALT ? PSTR("ALT ") : PSTR("   "), false);
-  oled_write_P(mod_state & MOD_MASK_SHIFT ? PSTR("SFT") : PSTR("   "), false);
+  oled_write_P(mod_state & MOD_MASK_GUI ? mod_logo[_GUI] : PSTR("  "), false);
+  oled_write_P(mod_state & MOD_MASK_CTRL ? mod_logo[_CTRL] : PSTR("  "), false);
+  oled_write_P(mod_state & MOD_MASK_ALT ? mod_logo[_ALT] : PSTR("  "), false);
+  oled_write_P(mod_state & MOD_MASK_SHIFT ? mod_logo[_SHIFT] : PSTR("  "), false);
 
   oled_write_P(PSTR("\n"), false);
   oled_write_P(!is_jis_mode() ? lang_logo[0][1] : lang_logo[1][1], false);
@@ -112,15 +110,20 @@ void render_status(void) {
   oled_write_P(os_logo[get_os_mode()][0], false);
   oled_write_P(PSTR(" "), false);
 
+  // Host Keyboard Custom Mod Status
+  oled_write_P(PSTR("Mod  : "), false);
+  oled_write_P(mod_logo[get_custom_mod_key()], false);
+  oled_write_P(PSTR("\n"), false);
+
+  oled_write_P(PSTR(" "), false);
+  oled_write_P(os_logo[get_os_mode()][1], false);
+  oled_write_P(PSTR(" "), false);
+
   // Host Keyboard LED Status
   led_t led_state = host_keyboard_led_state();
   oled_write_P(led_state.caps_lock ? PSTR("CAP  ") : PSTR("     "), false);
   oled_write_P(led_state.num_lock ? PSTR("NUM  ") : PSTR("     "), false);
   oled_write_P(led_state.scroll_lock ? PSTR("SCR\n") : PSTR("   \n"), false);
-
-  oled_write_P(PSTR(" "), false);
-  oled_write_P(os_logo[get_os_mode()][1], false);
-  oled_write_P(PSTR(" "), false);
 }
 
 static void render_logo(void) {
